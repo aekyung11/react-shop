@@ -29,6 +29,10 @@ export const productsList = selector<IProduct[]>({
   key: "productsList",
   get: async () => {
     try {
+      // for testing Suspense
+      // await new Promise((resolve) => {
+      //   setTimeout(resolve, 5000, true);
+      // })
       const response = await fetch(productsURL);
       return (await response.json()) || [];
     } catch (error) {

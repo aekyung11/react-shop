@@ -74,14 +74,22 @@ export const cartItems = selector<ICartItem[]>({
 export const cartTotalCount = selector<number>({
   key: "cartTotalCount",
   get({ get }) {
-    const items = get(cartItems);
-    return items.map((item) => item.count).reduce((acc, val) => acc + val, 0);
+    const cart = get(cartState);
+    return Object.values(cart)
+      .map((cartInfo) => cartInfo.count)
+      .reduce((acc, val) => acc + val, 0);
   },
 });
 
 export const cartTotal = selector<number>({
   key: "cartTotal",
   get({ get }) {
+    // skip loading products if empty
+    const cart = get(cartState);
+    if (Object.keys(cart).length === 0) {
+      return 0;
+    }
+
     const items = get(cartItems);
     return items.map((item) => item.price * item.count).reduce((acc, val) => acc + val, 0);
   },

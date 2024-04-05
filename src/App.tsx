@@ -2,25 +2,34 @@ import "./assets/css/tailwind.css";
 import { BrowserRouter, Link, useNavigate } from "react-router-dom";
 import Drawer from "./components/common/Drawer";
 import Router from "./router/router";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { cartTotalCount } from "./store/cart";
 import { themeState } from "./store/theme";
 import CONSTANTS from "./constants/constants";
-import React, { ChangeEventHandler, useEffect } from "react";
+import React, { ChangeEventHandler, startTransition, useEffect } from "react";
 import { productsForSearchTerm } from "./store/products";
 
 const Search = () => {
   const navigate = useNavigate();
+  const [inputValue, setInputValue] = React.useState("");
   const [term, setTerm] = React.useState("");
   const products = useRecoilValue(productsForSearchTerm({ term }));
   // const [s, a] = React.useState(n);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const searchedItemClassName = ".js-searchedItem";
-  const handleTermChange = React.useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
-    setTerm(!e ? "" : e.target.value);
+  const handleTermChange = React.useCallback((newValue: string) => {
+    setInputValue(newValue);
+
+    startTransition(() => {
+      setTerm(newValue);
+    });
+  }, []);
+  const handleInputChange = React.useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
+    const newValue = e?.target.value ?? "";
+    handleTermChange(newValue);
   }, []);
   const handleSelect = React.useCallback((id: number) => {
-    setTerm("");
+    handleTermChange("");
     navigate(`/product/${id}`);
   }, []);
   const handleInputKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,7 +73,7 @@ const Search = () => {
     inputRef.current?.classList.toggle("translate-y-full");
     inputRef.current?.classList.toggle("!opacity-100");
     inputRef.current?.blur();
-    setTerm("");
+    handleTermChange("");
   };
   // React.useEffect(() => {
   //   n.length <= 0 || a(n.filter((T) => (term === "" ? "" : T.title.toLowerCase().includes(term.toLowerCase()))));
@@ -94,8 +103,8 @@ const Search = () => {
         type="text"
         placeholder="검색"
         ref={inputRef}
-        value={term}
-        onChange={handleTermChange}
+        value={inputValue}
+        onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
         className="fixed left-0 top-4 -z-10 opacity-0 sm:opacity-100 sm:static sm:flex w-full input input-ghost focus:outline-0 rounded-none sm:rounded bg-gray-300 dark:bg-gray-600 !text-gray-800 dark:!text-white sm:transform-none transition-all js-searchInput"
       />
