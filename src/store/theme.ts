@@ -12,14 +12,6 @@ export const themeState = atom<string>({
       savedTheme && setSelf(savedTheme);
       onSet((value) => {
         localStorage.setItem(THEME_KEY, value);
-        if (typeof window !== "undefined") {
-          window.document.documentElement.dataset["theme"] = value;
-          if (value === CONSTANTS.THEME.LIGHT) {
-            window.document.documentElement.classList.remove(CONSTANTS.THEME.DARK);
-          } else {
-            window.document.documentElement.classList.add(CONSTANTS.THEME.DARK);
-          }
-        }
       });
     },
   ],

@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import BreadCrumb from "../common/Breadcrumb";
 import Confirm from "../common/Confirm";
-import { ICartState, cartState, cartTotal, isCartEmpty } from "../../store/cart";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { cartTotal, isCartEmpty } from "../../store/cart";
+import { useRecoilValue } from "recoil";
 import CartList from "./CartList";
 import { toCurrencyFormat } from "../../helpers/helpers";
 
 const CartView = (): JSX.Element => {
-  const [cart, setCart] = useRecoilState<ICartState>(cartState);
   const isEmpty = useRecoilValue<boolean>(isCartEmpty);
   const total = useRecoilValue<number>(cartTotal);
 

@@ -12,7 +12,7 @@ const Drawer = (): JSX.Element => {
           </Link>
         </li>
         <li>
-          <Link className="!text-gray-700 active:!text-white dark:!text-white" to="/accessory">
+          <Link className="!text-gray-700 active:!text-white dark:!text-white" to="/accessories">
             액세서리
           </Link>
         </li>

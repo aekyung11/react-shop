@@ -6,7 +6,7 @@ import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { cartTotalCount } from "./store/cart";
 import { themeState } from "./store/theme";
 import CONSTANTS from "./constants/constants";
-import React, { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, useEffect } from "react";
 import { productsForSearchTerm } from "./store/products";
 
 const Search = () => {
@@ -65,7 +65,6 @@ const Search = () => {
     inputRef.current?.classList.toggle("!opacity-100");
     inputRef.current?.blur();
     setTerm("");
-    // a([]);
   };
   // React.useEffect(() => {
   //   n.length <= 0 || a(n.filter((T) => (term === "" ? "" : T.title.toLowerCase().includes(term.toLowerCase()))));
@@ -125,8 +124,25 @@ const Search = () => {
   );
 };
 
-const App = (): JSX.Element => {
+const useTheme = () => {
   const [theme, setTheme] = useRecoilState(themeState);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.document.documentElement.dataset["theme"] = theme;
+      if (theme === CONSTANTS.THEME.LIGHT) {
+        window.document.documentElement.classList.remove(CONSTANTS.THEME.DARK);
+      } else {
+        window.document.documentElement.classList.add(CONSTANTS.THEME.DARK);
+      }
+    }
+  }, [theme]);
+
+  return [theme, setTheme];
+};
+
+const App = (): JSX.Element => {
+  const [theme, setTheme] = useTheme();
   const totalCount = useRecoilValue(cartTotalCount);
   return (
     <BrowserRouter>
@@ -143,12 +159,7 @@ const App = (): JSX.Element => {
                   viewBox="0 0 24 24"
                   className="inline-block w-6 h-6 stroke-gray-700 dark:stroke-current"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  ></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
               </label>
               <h1 className="shrink-0 flex md:flex-none flex-1 mx-1 sm:mx-2">
@@ -195,9 +206,9 @@ const App = (): JSX.Element => {
                       viewBox="0 0 24 24"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                       ></path>
                     </svg>
@@ -419,12 +430,12 @@ const App = (): JSX.Element => {
                     y2="9.104"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stop-color="#F89F20"></stop>
-                    <stop offset=".25" stop-color="#F79A20"></stop>
-                    <stop offset=".533" stop-color="#F68D20"></stop>
-                    <stop offset=".62" stop-color="#F58720"></stop>
-                    <stop offset=".723" stop-color="#F48120"></stop>
-                    <stop offset="1" stop-color="#F37521"></stop>
+                    <stop stopColor="#F89F20"></stop>
+                    <stop offset=".25" stopColor="#F79A20"></stop>
+                    <stop offset=".533" stopColor="#F68D20"></stop>
+                    <stop offset=".62" stopColor="#F58720"></stop>
+                    <stop offset=".723" stopColor="#F48120"></stop>
+                    <stop offset="1" stopColor="#F37521"></stop>
                   </linearGradient>
                   <linearGradient
                     id="pi-paint1_linear"
@@ -434,10 +445,10 @@ const App = (): JSX.Element => {
                     y2="6.446"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stop-color="#F58720"></stop>
-                    <stop offset=".359" stop-color="#E16F27"></stop>
-                    <stop offset=".703" stop-color="#D4602C"></stop>
-                    <stop offset=".982" stop-color="#D05B2E"></stop>
+                    <stop stopColor="#F58720"></stop>
+                    <stop offset=".359" stopColor="#E16F27"></stop>
+                    <stop offset=".703" stopColor="#D4602C"></stop>
+                    <stop offset=".982" stopColor="#D05B2E"></stop>
                   </linearGradient>
                 </defs>
               </svg>

@@ -59,7 +59,7 @@ export const productWithId = selectorFamily<IProduct | undefined, number>({
 });
 
 export const productsForSearchTerm = selectorFamily<IProduct[], { term: string }>({
-  key: "productsOfCategory",
+  key: "productsForSearchTerm",
   get:
     ({ term }) =>
     ({ get }) => {
